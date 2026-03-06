@@ -6,13 +6,14 @@ Usage:
     python transcribe.py --text "Hello world" --lang en
     python transcribe.py --audio input.wav --lang es
     python transcribe.py --input-file texts.txt --output-file output.txt --lang fr
+    python transcribe.py --gui  # Launch graphical interface
 """
 
 import argparse
 import sys
 from pathlib import Path
 
-from yamato_transcriber import PhoneticTranscriber, SUPPORTED_LANGUAGES
+from yamato_transcriber import PhoneticTranscriber, SUPPORTED_LANGUAGES, launch_gui
 
 
 def main():
@@ -96,8 +97,18 @@ Examples:
         action='store_true',
         help='Disable low-resource mode'
     )
+    parser.add_argument(
+        '--gui', '-g',
+        action='store_true',
+        help='Launch graphical user interface'
+    )
     
     args = parser.parse_args()
+    
+    # Launch GUI if requested
+    if args.gui:
+        launch_gui()
+        return 0
     
     # List languages if requested
     if args.list_languages:

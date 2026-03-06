@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="language_array">
+        <item>English (en)</item>
+        <item>Spanish (es)</item>
+        <item>French (fr)</item>
+        <item>Japanese (ja)</item>
+        <item>Haitian Creole (ht)</item>
+    </string-array>
+    
+    <string-array name="language_codes">
+        <item>en</item>
+        <item>es</item>
+        <item>fr</item>
+        <item>ja</item>
+        <item>ht</item>
+    </string-array>
+    
+    <string-array name="output_format_array">
+        <item>IPA</item>
+        <item>ARPABET</item>
+    </string-array>
+</resources>
