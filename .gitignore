@@ -1,12 +1,13 @@
 ```
-# Dependencies
-*.txt
-!requirements-web.txt
-# Environment
+# Environment variables
 .env
 .env.local
-.env.*
-# Python
+*.env.*
+
+# Streamlit specific
+.streamlit/secrets.toml
+
+# Dependencies
 __pycache__/
 *.pyc
 *.pyo
@@ -14,38 +15,41 @@ __pycache__/
 .Python
 env/
 venv/
+ENV/
 .venv/
-.ENV
+env.bak/
+venv.bak/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+.installed.cfg
+*.egg
+
 # Logs
 *.log
-# Coverage
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Testing
 .coverage
 coverage/
 htmlcov/
-# Testing
-.pytest_cache/
-.mypy_cache/
-# Distribution / packaging
-.Python
-env/
-venv/
-.venv/
-.ENV
-.ENV.local
-.python-version
-pip-log.txt
-pip-delete-this-directory.txt
-.tox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.log
-.git/
-!.git/
-*.git/
-.DS_Store
-Thumbs.db
+.nyc_output
+coverage-final.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
 ```
