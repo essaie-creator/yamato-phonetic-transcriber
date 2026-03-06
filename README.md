@@ -9,12 +9,20 @@ A lightweight multilingual phonetic transcription application designed for low-r
 - **Low-Resource Optimized**: Uses ONNX runtime for efficient inference
 - **SpeechBrain Integration**: Advanced speech processing capabilities
 - **Phonemizer Backend**: Accurate text-to-phoneme conversion
+- **Graphical User Interface**: User-friendly Tkinter GUI for non-technical users
+- **Mobile App**: Native Android app for Huawei and other Android devices
 
 ## Installation
+
+### Desktop (Python)
 
 ```bash
 pip install -r requirements.txt
 ```
+
+### Mobile (Android)
+
+Download the latest APK from [Releases](https://github.com/essaie-creator/yamato-phonetic-transcriber/releases) or build from source in `mobile-android/` directory. See `mobile-android/README.md` for details.
 
 ## Usage
 
@@ -29,12 +37,15 @@ python transcribe.py --audio input.wav --lang en
 
 # Batch processing
 python transcribe.py --input-file texts.txt --output-file transcriptions.txt --lang es
+
+# Launch GUI
+python transcribe.py --gui
 ```
 
 ### Python API
 
 ```python
-from yamato_transcriber import PhoneticTranscriber
+from yamato_transcriber import PhoneticTranscriber, launch_gui
 
 # Initialize transcriber
 transcriber = PhoneticTranscriber(language='en')
@@ -45,7 +56,14 @@ print(phonemes)  # /həˈloʊ wɜrld/
 
 # Audio to phonemes (via ASR)
 phonemes = transcriber.audio_to_phonemes("audio.wav")
+
+# Launch GUI
+launch_gui()
 ```
+
+### Mobile App
+
+See `mobile-android/README.md` for installation and usage instructions.
 
 ## Supported Languages
 

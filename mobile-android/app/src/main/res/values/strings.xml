@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Yamato Transcriber</string>
+    <string name="settings">Settings</string>
+    <string name="batch_processing">Batch Processing</string>
+    <string name="transcribe">Transcribe</string>
+    <string name="clear">Clear</string>
+    <string name="copy">Copy</string>
+    <string name="save">Save</string>
+    <string name="record">Record</string>
+    <string name="stop">Stop</string>
+    <string name="language">Language</string>
+    <string name="output_format">Output Format</string>
+    <string name="input_text">Enter text to transcribe...</string>
+    <string name="output_text">Phonetic transcription will appear here</string>
+    <string name="processing">Processing...</string>
+    <string name="ready">Ready</string>
+    <string name="error">Error</string>
+    <string name="success">Success</string>
+    <string name="copied_to_clipboard">Copied to clipboard</string>
+    <string name="saved_to_file">Saved to file</string>
+    <string name="permission_required">Permission Required</string>
+    <string name="microphone_permission_rationale">Microphone permission is needed for audio transcription</string>
+    <string name="storage_permission_rationale">Storage permission is needed to save transcriptions</string>
+    <string name="no_input">No input provided</string>
+    <string name="transcription_failed">Transcription failed</string>
+    <string name="model_loading">Loading model...</string>
+    <string name="low_resource_mode">Low Resource Mode</string>
+    <string name="about">About</string>
+    <string name="version">Version 1.0.0</string>
+</resources>
