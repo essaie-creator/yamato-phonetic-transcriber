@@ -51,9 +51,9 @@ Examples:
     parser.add_argument(
         '--lang', '-l',
         type=str,
-        default='en',
-        choices=list(SUPPORTED_LANGUAGES.keys()),
-        help='Language code (default: en)'
+        default='auto',
+        choices=['auto'] + list(SUPPORTED_LANGUAGES.keys()),
+        help='Language code or "auto" for automatic detection from audio (default: auto)'
     )
     
     # Output options
@@ -120,10 +120,15 @@ Examples:
     
     # Initialize transcriber
     try:
+        # Determine if auto-detection is enabled
+        auto_detect = (args.lang == 'auto')
+        language = 'en' if auto_detect else args.lang
+        
         transcriber = PhoneticTranscriber(
-            language=args.lang,
+            language=language,
             use_onnx=not args.no_onnx,
-            low_resource=not args.no_low_resource
+            low_resource=not args.no_low_resource,
+            auto_detect_language=auto_detect
         )
     except Exception as e:
         print(f"Error initializing transcriber: {e}", file=sys.stderr)
@@ -153,8 +158,11 @@ Examples:
         
         # Process audio input
         elif args.audio:
-            result = transcriber.audio_to_phonemes(args.audio)
-            output_handle.write(result + '\n')
+            result, detected_lang = transcriber.audio_to_phonemes(args.audio)
+            if auto_detect:
+                output_handle.write(f"[Detected Language: {detected_lang}] {result}\n")
+            else:
+                output_handle.write(result + '\n')
         
         # Process batch file input
         elif args.input_file:
