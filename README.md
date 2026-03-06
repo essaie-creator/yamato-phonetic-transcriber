@@ -4,6 +4,7 @@ A lightweight multilingual phonetic transcription application designed for low-r
 
 ## Features
 
+- **🎯 Automatic Language Detection**: Just upload audio - the app detects the language automatically!
 - **Multilingual Support**: English (en), Spanish (es), French (fr), Japanese (ja), Haitian Creole (ht)
 - **IPA Output**: International Phonetic Alphabet transcription
 - **Low-Resource Optimized**: Uses ONNX runtime for efficient inference
@@ -54,11 +55,14 @@ GitHub will automatically build the project and attach the binaries to the relea
 ### Command Line
 
 ```bash
+# 🆕 Auto-detect language from audio (default)
+python transcribe.py --audio input.wav
+
+# Manually specify language
+python transcribe.py --audio input.wav --lang en
+
 # Transcribe text to IPA
 python transcribe.py --text "Hello world" --lang en
-
-# Transcribe from audio file
-python transcribe.py --audio input.wav --lang en
 
 # Batch processing
 python transcribe.py --input-file texts.txt --output-file transcriptions.txt --lang es
@@ -72,15 +76,18 @@ python transcribe.py --gui
 ```python
 from yamato_transcriber import PhoneticTranscriber, launch_gui
 
-# Initialize transcriber
-transcriber = PhoneticTranscriber(language='en')
+# Initialize with auto-detection
+transcriber = PhoneticTranscriber(auto_detect_language=True)
 
-# Text to phonemes
+# Audio to phonemes with language detection
+phonemes, detected_lang = transcriber.audio_to_phonemes("audio.wav")
+print(f"Detected: {detected_lang}")  # e.g., 'es'
+print(f"Phonemes: {phonemes}")
+
+# Or manually specify language
+transcriber = PhoneticTranscriber(language='en')
 phonemes = transcriber.text_to_phonemes("Hello world")
 print(phonemes)  # /həˈloʊ wɜrld/
-
-# Audio to phonemes (via ASR)
-phonemes = transcriber.audio_to_phonemes("audio.wav")
 
 # Launch GUI
 launch_gui()
@@ -92,13 +99,15 @@ See `mobile-android/README.md` for installation and usage instructions.
 
 ## Supported Languages
 
-| Language | Code | Script |
-|----------|------|--------|
-| English | en | Latin |
-| Spanish | es | Latin |
-| French | fr | Latin |
-| Japanese | ja | Kana/Kanji |
-| Haitian Creole | ht | Latin |
+| Language | Code | Script | Auto-Detect |
+|----------|------|--------|-------------|
+| English | en | Latin | ✅ |
+| Spanish | es | Latin | ✅ |
+| French | fr | Latin | ✅ |
+| Japanese | ja | Kana/Kanji | ✅ |
+| Haitian Creole | ht | Latin | ✅ |
+
+🆕 **Automatic Language Detection**: The transcriber can now automatically detect the spoken language from audio files. See [AUTO_DETECT_LANGUAGE.md](AUTO_DETECT_LANGUAGE.md) for details.
 
 ## Architecture
 
