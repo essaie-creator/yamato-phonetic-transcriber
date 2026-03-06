@@ -20,9 +20,34 @@ A lightweight multilingual phonetic transcription application designed for low-r
 pip install -r requirements.txt
 ```
 
-### Mobile (Android)
+### Mobile (Android/Huawei)
 
-Download the latest APK from [Releases](https://github.com/essaie-creator/yamato-phonetic-transcriber/releases) or build from source in `mobile-android/` directory. See `mobile-android/README.md` for details.
+**Option 1: Download Pre-built APK**
+Download the latest APK from [Releases](https://github.com/essaie-creator/yamato-phonetic-transcriber/releases). Look for assets named `app-debug.apk` or `app-release-unsigned.apk`.
+
+**Option 2: Build from Source**
+See `mobile-android/README.md` and `mobile-android/BUILD.md` for detailed build instructions.
+
+### Automatic Builds via GitHub Actions
+
+This project uses GitHub Actions to automatically build and attach binaries to releases:
+
+- **Python packages**: Triggered by tags like `v1.0.0`, `v1.2.3-beta`
+- **Android APKs**: Triggered by tags like `v1.0.0-android`, `v1.2.3-mobile`
+
+To trigger a build, simply create and push a tag:
+
+```bash
+# For Python release
+git tag v1.0.0
+git push origin v1.0.0
+
+# For Android release
+git tag v1.0.0-android
+git push origin v1.0.0-android
+```
+
+GitHub will automatically build the project and attach the binaries to the release page.
 
 ## Usage
 
