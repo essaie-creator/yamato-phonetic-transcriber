@@ -1,0 +1,7 @@
+speechbrain>=0.3.0
+phonemizer>=3.2.0
+onnxruntime>=1.16.0
+numpy>=1.24.0
+torch>=2.0.0
+librosa>=0.10.0
+soundfile>=0.12.0
