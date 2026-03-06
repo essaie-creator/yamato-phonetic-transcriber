@@ -1,7 +1,7 @@
 # Web app dependencies
 streamlit>=1.28.0
 # Core dependencies with pinned versions for compatibility
-speechbrain==0.3.3
+speechbrain==1.0.0
 phonemizer>=3.2.0
 onnxruntime>=1.16.0
 numpy>=1.24.0,<2.0.0
