@@ -6,13 +6,14 @@ Usage:
     python transcribe.py --text "Hello world" --lang en
     python transcribe.py --audio input.wav --lang es
     python transcribe.py --input-file texts.txt --output-file output.txt --lang fr
+    python transcribe.py --gui  # Launch graphical interface
 """
 
 import argparse
 import sys
 from pathlib import Path
 
-from yamato_transcriber import PhoneticTranscriber, SUPPORTED_LANGUAGES
+from yamato_transcriber import PhoneticTranscriber, SUPPORTED_LANGUAGES, launch_gui
 
 
 def main():
@@ -50,9 +51,9 @@ Examples:
     parser.add_argument(
         '--lang', '-l',
         type=str,
-        default='en',
-        choices=list(SUPPORTED_LANGUAGES.keys()),
-        help='Language code (default: en)'
+        default='auto',
+        choices=['auto'] + list(SUPPORTED_LANGUAGES.keys()),
+        help='Language code or "auto" for automatic detection from audio (default: auto)'
     )
     
     # Output options
@@ -96,8 +97,18 @@ Examples:
         action='store_true',
         help='Disable low-resource mode'
     )
+    parser.add_argument(
+        '--gui', '-g',
+        action='store_true',
+        help='Launch graphical user interface'
+    )
     
     args = parser.parse_args()
+    
+    # Launch GUI if requested
+    if args.gui:
+        launch_gui()
+        return 0
     
     # List languages if requested
     if args.list_languages:
@@ -109,10 +120,15 @@ Examples:
     
     # Initialize transcriber
     try:
+        # Determine if auto-detection is enabled
+        auto_detect = (args.lang == 'auto')
+        language = 'en' if auto_detect else args.lang
+        
         transcriber = PhoneticTranscriber(
-            language=args.lang,
+            language=language,
             use_onnx=not args.no_onnx,
-            low_resource=not args.no_low_resource
+            low_resource=not args.no_low_resource,
+            auto_detect_language=auto_detect
         )
     except Exception as e:
         print(f"Error initializing transcriber: {e}", file=sys.stderr)
@@ -142,8 +158,11 @@ Examples:
         
         # Process audio input
         elif args.audio:
-            result = transcriber.audio_to_phonemes(args.audio)
-            output_handle.write(result + '\n')
+            result, detected_lang = transcriber.audio_to_phonemes(args.audio)
+            if auto_detect:
+                output_handle.write(f"[Detected Language: {detected_lang}] {result}\n")
+            else:
+                output_handle.write(result + '\n')
         
         # Process batch file input
         elif args.input_file:
