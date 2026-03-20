@@ -1,35 +1,48 @@
-```
 # Dependencies
+venv/
+.venv/
+env/
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
-.venv/
-venv/
-env/
-.env
-.env.local
-.env.*
-# Build artifacts
+
+# Distribution / packaging
+.Python
 build/
 dist/
 *.egg-info/
+.installed.cfg
+*.egg
+
+# Environment
+.env
+.env.local
+*.env.*
+
 # Logs
 *.log
+
 # Editor/IDE
 .vscode/
 .idea/
 *.swp
 *.swo
+*~
 *.tmp
+
 # Coverage
 .coverage
 coverage/
 htmlcov/
+
 # Testing
 .pytest_cache/
 .mypy_cache/
+
 # OS
 .DS_Store
 Thumbs.db
-```
+
+# Docker
+.dockerignore
