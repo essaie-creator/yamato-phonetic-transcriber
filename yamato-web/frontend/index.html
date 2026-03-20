@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yamato - Phonetic Lyrics</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            color: white;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .search-box {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+
+        .search-input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .search-btn {
+            padding: 15px 30px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .search-btn:hover {
+            background: #5568d3;
+        }
+
+        .search-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .language-select {
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .language-select label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .language-select select {
+            padding: 8px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        .results {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .results.active {
+            display: block;
+        }
+
+        .song-info {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .song-info h2 {
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .song-info p {
+            color: #666;
+        }
+
+        .lyrics-container {
+            max-height: 60vh;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .lyric-line {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            background: #f8f9fa;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+        }
+
+        .lyric-line:hover {
+            background: #f0f0f5;
+            border-left-color: #667eea;
+        }
+
+        .lyric-line.active {
+            background: #e8ebff;
+            border-left-color: #667eea;
+            transform: scale(1.02);
+        }
+
+        .lyric-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .lyric-phonemes {
+            font-size: 0.95rem;
+            color: #667eea;
+            font-family: 'Arial Unicode MS', 'Lucida Sans Unicode', sans-serif;
+            word-wrap: break-word;
+        }
+
+        .search-results {
+            list-style: none;
+        }
+
+        .search-result-item {
+            padding: 15px;
+            margin: 10px 0;
+            background: #f8f9fa;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-result-item:hover {
+            background: #e8ebff;
+            transform: translateX(5px);
+        }
+
+        .search-result-info h3 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .search-result-info p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .synced-badge {
+            background: #4caf50;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .plain-badge {
+            background: #ff9800;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .search-input-group {
+                flex-direction: column;
+            }
+
+            .search-btn {
+                width: 100%;
+            }
+
+            .lyric-text {
+                font-size: 1rem;
+            }
+
+            .lyric-phonemes {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎵 Yamato</h1>
+            <p>Phonetic Lyrics for Perfect Singing</p>
+        </header>
+
+        <div class="search-box">
+            <div class="search-input-group">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    class="search-input" 
+                    placeholder="Search for a song (e.g., 'Bohemian Rhapsody Queen')"
+                    onkeypress="if(event.key === 'Enter') searchSongs()"
+                >
+                <button id="searchBtn" class="search-btn" onclick="searchSongs()">Search</button>
+            </div>
+            <div class="language-select">
+                <label for="languageSelect">Phonetic Language:</label>
+                <select id="languageSelect">
+                    <option value="en">English</option>
+                    <option value="es">Spanish</option>
+                    <option value="fr">French</option>
+                    <option value="ja">Japanese</option>
+                    <option value="ht">Haitian Creole</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="loading" class="loading hidden">Loading...</div>
+        <div id="error" class="error hidden"></div>
+
+        <div id="searchResults" class="results">
+            <h2 style="margin-bottom: 15px;">Search Results</h2>
+            <ul id="resultsList" class="search-results"></ul>
+        </div>
+
+        <div id="lyricsDisplay" class="results">
+            <div class="song-info">
+                <h2 id="songTitle"></h2>
+                <p id="songArtist"></p>
+                <p id="songAlbum" style="font-size: 0.9rem; margin-top: 5px;"></p>
+                <span id="syncedBadge" class="synced-badge hidden">Synced Lyrics</span>
+            </div>
+            <div id="lyricsContainer" class="lyrics-container"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000'; // Update with your deployed URL in production
+        
+        async function searchSongs() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (!query) return;
+
+            showLoading();
+            hideError();
+            hideResults();
+            hideLyrics();
+
+            try {
+                const response = await fetch(`${API_BASE}/api/search?q=${encodeURIComponent(query)}`);
+                if (!response.ok) throw new Error('Search failed');
+                
+                const results = await response.json();
+                displaySearchResults(results);
+            } catch (error) {
+                showError('Failed to search songs. Please try again.');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        function displaySearchResults(results) {
+            const list = document.getElementById('resultsList');
+            list.innerHTML = '';
+
+            if (results.length === 0) {
+                showError('No songs found. Try a different search term.');
+                return;
+            }
+
+            results.forEach(song => {
+                const item = document.createElement('li');
+                item.className = 'search-result-item';
+                item.innerHTML = `
+                    <div class="search-result-info">
+                        <h3>${escapeHtml(song.title)}</h3>
+                        <p>${escapeHtml(song.artist)} • ${escapeHtml(song.album || 'Unknown Album')}</p>
+                    </div>
+                    <span class="${song.hasSynced ? 'synced-badge' : 'plain-badge'}">
+                        ${song.hasSynced ? '⏱️ Synced' : '📝 Plain'}
+                    </span>
+                `;
+                item.onclick = () => loadLyrics(song.id);
+                list.appendChild(item);
+            });
+
+            showResults();
+        }
+
+        async function loadLyrics(songId) {
+            const lang = document.getElementById('languageSelect').value;
+            
+            showLoading();
+            hideError();
+            hideResults();
+            hideLyrics();
+
+            try {
+                const response = await fetch(`${API_BASE}/api/lyrics/${songId}?lang=${lang}`);
+                if (!response.ok) throw new Error('Failed to load lyrics');
+                
+                const data = await response.json();
+                displayLyrics(data);
+            } catch (error) {
+                showError('Failed to load lyrics. Please try again.');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        function displayLyrics(data) {
+            document.getElementById('songTitle').textContent = data.title;
+            document.getElementById('songArtist').textContent = data.artist;
+            document.getElementById('songAlbum').textContent = data.album || '';
+            
+            const badge = document.getElementById('syncedBadge');
+            if (data.is_synced) {
+                badge.textContent = '⏱️ Synced Lyrics';
+                badge.classList.remove('hidden');
+            } else {
+                badge.textContent = '📝 Plain Lyrics';
+                badge.classList.remove('hidden');
+            }
+
+            const container = document.getElementById('lyricsContainer');
+            container.innerHTML = '';
+
+            data.lyrics.forEach((line, index) => {
+                const lineDiv = document.createElement('div');
+                lineDiv.className = 'lyric-line';
+                lineDiv.dataset.time = line.time;
+                lineDiv.innerHTML = `
+                    <div class="lyric-text">${escapeHtml(line.text)}</div>
+                    <div class="lyric-phonemes">${escapeHtml(line.phonemes)}</div>
+                `;
+                container.appendChild(lineDiv);
+            });
+
+            showLyrics();
+        }
+
+        function showLoading() {
+            document.getElementById('loading').classList.remove('hidden');
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').classList.add('hidden');
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.classList.remove('hidden');
+        }
+
+        function hideError() {
+            document.getElementById('error').classList.add('hidden');
+        }
+
+        function showResults() {
+            document.getElementById('searchResults').classList.add('active');
+        }
+
+        function hideResults() {
+            document.getElementById('searchResults').classList.remove('active');
+        }
+
+        function showLyrics() {
+            document.getElementById('lyricsDisplay').classList.add('active');
+        }
+
+        function hideLyrics() {
+            document.getElementById('lyricsDisplay').classList.remove('active');
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>

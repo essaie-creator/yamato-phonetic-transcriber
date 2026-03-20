@@ -1,9 +1,13 @@
 ```
-# Python
+# Dependencies
+venv/
+.venv/
 __pycache__/
-*.py[cod]
-*$py.class
-*.so
+*.pyc
+*.pyo
+*.pyd
+
+# Distribution / packaging
 .Python
 build/
 develop-eggs/
@@ -21,40 +25,25 @@ wheels/
 .installed.cfg
 *.egg
 
-# Virtual environments
-venv/
-env/
-ENV/
-.venv/
-.env/
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# Logs
-*.log
-
-# Environment variables
+# Environment
 .env
 .env.local
 *.env.*
 
-# Coverage
-.coverage
-coverage/
-htmlcov/
+# Logs
+*.log
 
-# MyPy
-.mypy_cache/
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
 
-# Pytest
-.pytest_cache/
+# OS
+.DS_Store
+Thumbs.db
 
-# Distribution / packaging
-.pytest_cache/
-.hypothesis/
-.coverage*
+# Docker
+.dockerignore
 ```
